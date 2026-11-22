@@ -1,0 +1,92 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+" 登录接口","2","正确的账号密码","scripts","2026-11-22","broken","2026-11-22","","test_login","",""
+"模糊查询：用id查详情","0","模糊查询：用id查详情","scripts","2026-11-22","broken","2026-11-22","TestProduct","test_product","",""
+"逆向/参数异常：删不存在的 id、非法 id（数据驱动）","0","DEFECT-逆向-删不存在的id-返回500","scripts","2026-11-22","broken","2026-11-22","TestCategoryDelete","test_product_category","",""
+"业务异常：删有子分类的父分类（应拦截；大概率照删 → 固化 DEFECT）","0","业务异常：删有子分类的父分类（应拦截；大概率照删 → 固化 DEFECT）","scripts","2026-11-22","broken","2026-11-22","TestCategoryDelete","test_product_category","",""
+"正向：分页查询品牌列表","0","正向：分页查询品牌列表","scripts","2026-11-22","broken","2026-11-22","","test_brand","",""
+"正向：合法创建 → 反查验证 → 清理删除","0","正向：合法创建 → 反查验证 → 清理删除","scripts","2026-11-22","broken","2026-11-22","TestCategoryCreate","test_product_category","",""
+"正向：先建 → 删 → 查回确认没了","0","正向：先建 → 删 → 查回确认没了","scripts","2026-11-22","broken","2026-11-22","TestCategoryDelete","test_product_category","",""
+"反向：必填缺失 / 状态值非法（数据从 json 读取）","0","缺logo","scripts","2026-11-22","broken","2026-11-22","","test_brand","",""
+"数据驱动：修改分类（verify=true 的自动查回验证）","0","边界-属性列表为空","scripts","2026-11-22","broken","2026-11-22","TestCategoryUpdate","test_product_category","",""
+"逆向/参数异常：删不存在的 id、非法 id（数据驱动）","0","DEFECT-参数异常-id为0-返回500","scripts","2026-11-22","broken","2026-11-22","TestCategoryDelete","test_product_category","",""
+"5 冒烟：设新品→详情查回","0","5 冒烟：设新品→详情查回","scripts","2026-11-22","broken","2026-11-22","TestProductStatus","test_product_write","",""
+"10 反向数据驱动：缺名称/价格负/库存负/市场价负
+        价格/库存/市场价 → DEFECT 固化：负数被静默放行入库
+        缺名称 → 待实测（上轮被 401 偶发挡住）
+        ","0","创建缺名称","scripts","2026-11-22","broken","2026-11-22","TestProductCrud","test_product_write","",""
+"3 反向：状态值 99
+        DEFECT 固化：服务端不校验取值，99 被静默写库（应仅允许 0/1）
+        ","0","3 反向：状态值 99","scripts","2026-11-22","broken","2026-11-22","TestProductStatus","test_product_write","",""
+"逆向数据驱动：缺省/非法参数（取值→清理→断言）","0","DEFECT-逆向-parentId不存在(99999)-放行200","scripts","2026-11-22","broken","2026-11-22","TestCategoryCreate","test_product_category","",""
+"10 反向数据驱动：缺名称/价格负/库存负/市场价负
+        价格/库存/市场价 → DEFECT 固化：负数被静默放行入库
+        缺名称 → 待实测（上轮被 401 偶发挡住）
+        ","0","创建价格负数","scripts","2026-11-22","broken","2026-11-22","TestProductCrud","test_product_write","",""
+"逆向/边界：数据驱动（读接口，不用清理）","0","逆向-parentId不存在(99999)-返回空列表","scripts","2026-11-22","broken","2026-11-22","TestCategoryList","test_product_category","",""
+"逆向数据驱动：缺省/非法参数（取值→清理→断言）","0","DEFECT-逆向-parentId非数字(abc)-误报401","scripts","2026-11-22","broken","2026-11-22","TestCategoryCreate","test_product_category","",""
+"逆向/参数异常：删不存在的 id、非法 id（数据驱动）","0","DEFECT-参数异常-id为abc-误报401","scripts","2026-11-22","broken","2026-11-22","TestCategoryDelete","test_product_category","",""
+"9 正向：创建→查回验证字段→逻辑删除（闭环）","0","9 正向：创建→查回验证字段→逻辑删除（闭环）","scripts","2026-11-22","broken","2026-11-22","TestProductCrud","test_product_write","",""
+"正向：showStatus 合法值 0/1，两层断言（code + 查回比对）","0","正向：showStatus 合法值 0/1，两层断言（code + 查回比对） [show_status=1]","scripts","2026-11-22","broken","2026-11-22","TestCategoryShowStatus","test_product_category","",""
+"13 反向：productSn 重复
+        DEFECT 固化：无唯一性约束，重复货号被放行入库
+        ","0","13 反向：productSn 重复","scripts","2026-11-22","broken","2026-11-22","TestProductCrud","test_product_write","",""
+"逆向数据驱动：缺省/非法参数（取值→清理→断言）","0","逆向-name缺省(null)-正确拦截404","scripts","2026-11-22","broken","2026-11-22","TestCategoryCreate","test_product_category","",""
+" 登录接口","2","密码错误","scripts","2026-11-22","broken","2026-11-22","","test_login","",""
+"","0","按上架状态查询","scripts","2026-11-22","broken","2026-11-22","TestProduct","test_product","",""
+"10 反向数据驱动：缺名称/价格负/库存负/市场价负
+        价格/库存/市场价 → DEFECT 固化：负数被静默放行入库
+        缺名称 → 待实测（上轮被 401 偶发挡住）
+        ","0","创建库存负数","scripts","2026-11-22","broken","2026-11-22","TestProductCrud","test_product_write","",""
+"逆向：数据驱动，一层断言（code + message 文案）","0","DEFECT-逆向-ids不存在-返回500","scripts","2026-11-22","broken","2026-11-22","TestCategoryShowStatus","test_product_category","",""
+"逆向数据驱动：缺省/非法参数（取值→清理→断言）","0","DEFECT-逆向-parentId缺省(null)-误报401","scripts","2026-11-22","broken","2026-11-22","TestCategoryCreate","test_product_category","",""
+"11 正向：改名称→查回验证","0","11 正向：改名称→查回验证","scripts","2026-11-22","broken","2026-11-22","TestProductCrud","test_product_write","",""
+"查询不存在的商品","0","查询不存在的商品","scripts","2026-11-22","broken","2026-11-22","TestProduct","test_product","",""
+"数据驱动：修改分类（verify=true 的自动查回验证）","0","DEFECT-父分类自引用-放行200","scripts","2026-11-22","broken","2026-11-22","TestCategoryUpdate","test_product_category","",""
+"正向：showStatus 合法值 0/1，两层断言（code + 查回比对）","0","正向：showStatus 合法值 0/1，两层断言（code + 查回比对） [show_status=0]","scripts","2026-11-22","broken","2026-11-22","TestCategoryShowStatus","test_product_category","",""
+"","0","关键字无结果","scripts","2026-11-22","broken","2026-11-22","TestProduct","test_product","",""
+"","0","分页第2页","scripts","2026-11-22","broken","2026-11-22","TestProduct","test_product","",""
+"逆向/边界：数据驱动（读接口，不用清理）","0","DEFECT-逆向-parentId非数字(abc)-误报401","scripts","2026-11-22","broken","2026-11-22","TestCategoryList","test_product_category","",""
+"逆向/边界：数据驱动（读接口，不用清理）","0","DEFECT-边界-pageSize为-1-放行200返回空页","scripts","2026-11-22","broken","2026-11-22","TestCategoryList","test_product_category","",""
+"10 反向数据驱动：缺名称/价格负/库存负/市场价负
+        价格/库存/市场价 → DEFECT 固化：负数被静默放行入库
+        缺名称 → 待实测（上轮被 401 偶发挡住）
+        ","0","创建市场价负数","scripts","2026-11-22","broken","2026-11-22","TestProductCrud","test_product_write","",""
+"","0","test_product_search","scripts","2026-11-22","broken","2026-11-22","TestProduct","test_product","",""
+"逆向：数据驱动，一层断言（code + message 文案）","0","DEFECT-逆向-showStatus越界(99)-放行200","scripts","2026-11-22","broken","2026-11-22","TestCategoryShowStatus","test_product_category","",""
+"逆向：数据驱动（越界抽测 + ids 空差异补测），一层断言","0","DEFECT-逆向-ids为空-SQL报错泄露","scripts","2026-11-22","broken","2026-11-22","TestCategoryNavStatus","test_product_category","",""
+"逆向/边界：数据驱动（读接口，不用清理）","0","DEFECT-边界-pageSize为0-放行200返回空页","scripts","2026-11-22","broken","2026-11-22","TestCategoryList","test_product_category","",""
+"7 冒烟：审核通过→详情查回（五胞胎叛徒，多传 detail）","0","7 冒烟：审核通过→详情查回（五胞胎叛徒，多传 detail）","scripts","2026-11-22","broken","2026-11-22","TestProductStatus","test_product_write","",""
+"逆向/边界：数据驱动（读接口，不用清理）","0","DEFECT-逆向-pageSize非数字(abc)-误报401","scripts","2026-11-22","broken","2026-11-22","TestCategoryList","test_product_category","",""
+"数据驱动：修改分类（verify=true 的自动查回验证）","0","DEFECT-父分类不存在-放行200","scripts","2026-11-22","broken","2026-11-22","TestCategoryUpdate","test_product_category","",""
+"8 差异：逻辑删除后列表查不到（呼应「银色商品搜不到」的坑）","0","8 差异：逻辑删除后列表查不到（呼应「银色商品搜不到」的坑）","scripts","2026-11-22","broken","2026-11-22","TestProductStatus","test_product_write","",""
+"正向：翻页 pageNum=2，与第 1 页不重复","0","正向：翻页 pageNum=2，与第 1 页不重复","scripts","2026-11-22","broken","2026-11-22","TestCategoryList","test_product_category","",""
+"接口关联全链：创建品牌 → 按名字查回 id → 删除","0","接口关联全链：创建品牌 → 按名字查回 id → 删除","scripts","2026-11-22","broken","2026-11-22","","test_brand","",""
+"1 正向+关联：上架→按状态查回→下架→查不到（流转闭环）","0","1 正向+关联：上架→按状态查回→下架→查不到（流转闭环）","scripts","2026-11-22","broken","2026-11-22","TestProductStatus","test_product_write","",""
+"2 反向：ids 不存在 → 影响行数 0 → 操作失败","0","2 反向：ids 不存在 → 影响行数 0 → 操作失败","scripts","2026-11-22","broken","2026-11-22","TestProductStatus","test_product_write","",""
+"正向：navStatus 合法值 0/1，两层断言（code + 查回比对）","0","正向：navStatus 合法值 0/1，两层断言（code + 查回比对） [nav_status=0]","scripts","2026-11-22","broken","2026-11-22","TestCategoryNavStatus","test_product_category","",""
+"逆向数据驱动：缺省/非法参数（取值→清理→断言）","0","逆向-navStatus缺省(null)-NULL直接入库无人兜底","scripts","2026-11-22","broken","2026-11-22","TestCategoryCreate","test_product_category","",""
+"正向：缺省 pageNum，应默认查第 1 页（与显式 pageNum=1 结果一致）","0","正向：缺省 pageNum，应默认查第 1 页（与显式 pageNum=1 结果一致）","scripts","2026-11-22","broken","2026-11-22","TestCategoryList","test_product_category","",""
+"测试查询商品列表","0","测试查询商品列表","scripts","2026-11-22","broken","2026-11-22","TestProduct","test_product","",""
+"12 反向：改不存在的 id
+        DEFECT 固化：返回 200 成功，未校验商品是否存在（应报错）
+        ","0","12 反向：改不存在的 id","scripts","2026-11-22","broken","2026-11-22","TestProductCrud","test_product_write","",""
+"数据驱动：修改分类（verify=true 的自动查回验证）","0","正向-改名称","scripts","2026-11-22","broken","2026-11-22","TestCategoryUpdate","test_product_category","",""
+"业务规则：同名再建应拦截（大概率放行 → DEFECT）","0","业务规则：同名再建应拦截（大概率放行 → DEFECT）","scripts","2026-11-22","broken","2026-11-22","TestCategoryCreate","test_product_category","",""
+"反向：必填缺失 / 状态值非法（数据从 json 读取）","0","厂家状态非法","scripts","2026-11-22","broken","2026-11-22","","test_brand","",""
+"6 冒烟：设推荐→详情查回
+        注意：返回字段名是 recommandStatus（mall 源码拼写错误），不是 recommendStatus
+        ","0","6 冒烟：设推荐→详情查回","scripts","2026-11-22","broken","2026-11-22","TestProductStatus","test_product_write","",""
+"逆向：数据驱动（越界抽测 + ids 空差异补测），一层断言","0","DEFECT-逆向-navStatus越界(99)-放行200","scripts","2026-11-22","broken","2026-11-22","TestCategoryNavStatus","test_product_category","",""
+"横切冒烟：未登录访问应 401（鉴权基线 + 给 401 误报缺陷当对照照）","1","横切冒烟：未登录访问应 401（鉴权基线 + 给 401 误报缺陷当对照照）","scripts","2026-11-22","broken","2026-11-22","TestCategoryWithChildren","test_product_category","",""
+"数据驱动：修改分类（verify=true 的自动查回验证）","0","反向-名称为空","scripts","2026-11-22","broken","2026-11-22","TestCategoryUpdate","test_product_category","",""
+"逆向：数据驱动，一层断言（code + message 文案）","0","DEFECT-逆向-showStatus越界(2)-放行200","scripts","2026-11-22","broken","2026-11-22","TestCategoryShowStatus","test_product_category","",""
+"正向：navStatus 合法值 0/1，两层断言（code + 查回比对）","0","正向：navStatus 合法值 0/1，两层断言（code + 查回比对） [nav_status=1]","scripts","2026-11-22","broken","2026-11-22","TestCategoryNavStatus","test_product_category","",""
+"正向：缺省 pageSize，应默认每页 5 条","0","正向：缺省 pageSize，应默认每页 5 条","scripts","2026-11-22","broken","2026-11-22","TestCategoryList","test_product_category","",""
+"正向：自建父子分类 → 查树验证挂载关系 → 清理","0","正向：自建父子分类 → 查树验证挂载关系 → 清理","scripts","2026-11-22","broken","2026-11-22","TestCategoryWithChildren","test_product_category","",""
+" 登录接口","1","用户名为空","scripts","2026-11-22","broken","2026-11-22","","test_login","",""
+"4 反向：ids 传空
+        DEFECT 固化：空 ids 拼出非法 SQL，且把数据库原始报错泄露给前端（安全隐患）
+        ","0","4 反向：ids 传空","scripts","2026-11-22","broken","2026-11-22","TestProductStatus","test_product_write","",""
+" 登录接口","1","用户名不存在","scripts","2026-11-22","broken","2026-11-22","","test_login","",""
+"正向：parentId=0 + 分页参数，验结构 + 过滤正确","0","正向：parentId=0 + 分页参数，验结构 + 过滤正确","scripts","2026-11-22","broken","2026-11-22","TestCategoryList","test_product_category","",""
+"反向：必填缺失 / 状态值非法（数据从 json 读取）","0","缺名称","scripts","2026-11-22","broken","2026-11-22","","test_brand","",""
