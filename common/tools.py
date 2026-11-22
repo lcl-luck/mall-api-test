@@ -1,17 +1,14 @@
 '''
-公共工具模块
+公共断言工具
 '''
 
-def assert_common(result, code = 200, msg = None):
-    '''
-    公共断言方法：校验业务码（和可选的提示信息）
-    :param result: 接口响应对象（requests 和 response）
-    :param code: 期望的业务码，默认 200
-    :param msg: 期望的提示信息（不传则不校验这一项）
-    '''
-    result = result.json()
-    assert result['code'] == code, f'期望 code={code}，实际={result['code']}，响应：{result}'
 
-    if msg is not None:
-        assert result['message'] == msg, f'期望message = {msg!r}，实际={result["message"]!r}'
-        
+def assert_common(result, code=200):
+    '''
+    公共断言：校验 HTTP 状态码 + 业务 code
+    :param result: 接口响应对象
+    :param code: 期望的业务 code
+    '''
+    assert result.status_code == 200, f'HTTP 状态码异常：{result.status_code}'
+    data = result.json()
+    assert data['code'] == code, f'期望 code={code}，实际={data["code"]}，响应：{data}'
