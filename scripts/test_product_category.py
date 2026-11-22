@@ -41,7 +41,7 @@ class TestCategoryUpdate:
         )
 
         # 第一层断言：所有用例都验
-        assert_common(result, code=case['expected_code'])
+        assert_common(result, code=case['expected_code'], http=case.get('expected_http', 200))
         if case.get('expected_msg'):
             assert case['expected_msg'] in result.json()['message']
 
@@ -78,13 +78,13 @@ class TestCategoryShowStatus:
             show_status=case.get('show_status'),
         )
 
-        assert_common(result, code=case['expected_code'])
+        assert_common(result, code=case['expected_code'], http=case.get('expected_http', 200))
         if case.get('expected_msg'):
             assert case['expected_msg'] in result.json()['message']
 
 
 class TestCategoryNavStatus:
-    '''商品分类导航状态用例：同构冒烟（showStatus 已测透，这里抽测）'''
+    '''商品分类导航状态用例：与 showStatus 同构，只抽测'''
 
     @pytest.mark.parametrize('nav_status', [0, 1], ids=['导航-0', '导航-1'])
     def test_update_nav_status_positive(self, logged_in_session, nav_status):
@@ -110,7 +110,7 @@ class TestCategoryNavStatus:
             nav_status=case.get('nav_status'),
         )
 
-        assert_common(result, code=case['expected_code'])
+        assert_common(result, code=case['expected_code'], http=case.get('expected_http', 200))
         if case.get('expected_msg'):
             assert case['expected_msg'] in result.json()['message']
 
@@ -143,7 +143,7 @@ class TestCategoryDelete:
         assert detail.json()['data'] is None, f'分类应已删除，实际 data={detail.json()["data"]}'
 
     def test_delete_parent_with_child(self, logged_in_session):
-        '''业务异常：删有子分类的父分类（应拦截；大概率照删 → 固化 DEFECT）'''
+        '''业务异常：删有子分类的父分类（预期应拦截）'''
         api = ApiProductCategory()
         parent_id = self._create_and_get_id(logged_in_session, '临时父分类-待删')
         child_id = self._create_and_get_id(logged_in_session, '临时子分类-孤儿观察', parent_id=parent_id)
@@ -151,7 +151,7 @@ class TestCategoryDelete:
         result = api.api_category_delete_method(logged_in_session, category_id=parent_id)
         assert_common(result, code=200)
 
-        # 子分类还在、父分类没了 = 孤儿数据实锤
+        # 子分类还在、父分类没了 → 孤儿数据（DEFECT）
         child = api.api_get_product_category_by_id(logged_in_session, category_id=child_id)
         assert child.json()['data'] is not None, '子分类还在（孤儿）'
         parent = api.api_get_product_category_by_id(logged_in_session, category_id=parent_id)
@@ -165,7 +165,7 @@ class TestCategoryDelete:
 
         result = api.api_category_delete_method(logged_in_session, category_id=case['category_id'])
 
-        assert_common(result, code=case['expected_code'])
+        assert_common(result, code=case['expected_code'], http=case.get('expected_http', 200))
         if case.get('expected_msg'):
             assert case['expected_msg'] in result.json()['message']
 
@@ -205,7 +205,7 @@ class TestCategoryCreate:
         assert detail.json()['data']['parentId'] == 0
 
     def test_create_duplicate_name(self, logged_in_session):
-        '''业务规则：同名再建应拦截（大概率放行 → DEFECT）'''
+        '''业务规则：同名再建应拦截'''
         api = ApiProductCategory()
         name = '临时分类-同名测试'
 
@@ -222,9 +222,9 @@ class TestCategoryCreate:
 
         # 断言统一放最后
         assert_common(first, code=200)
-        assert_common(second, code=200)  # 应拦截同名，大概率 200 放行 → 固化 DEFECT
-        # DEFECT-13：同名两条都入库（唯一性缺失），固化实际行为
-        assert len(same_name_ids) == 2, f'同名应只有一条，实际 {len(same_name_ids)} 条'  # 原来是 == 1
+        assert_common(second, code=200)  # DEFECT：同名未被拦截
+        # DEFECT-13：同名两条都入库（无唯一性校验），按实际行为断言
+        assert len(same_name_ids) == 2, f'同名两条都入库（DEFECT），实际 {len(same_name_ids)} 条'
 
     @pytest.mark.parametrize('case', create_neg_cases,
                              ids=[c['desc'] for c in create_neg_cases])
@@ -262,7 +262,7 @@ class TestCategoryCreate:
                 api.api_category_delete_method(logged_in_session, category_id=cid)
 
         # 断言统一放最后
-        assert_common(result, code=case['expected_code'])
+        assert_common(result, code=case['expected_code'], http=case.get('expected_http', 200))
         if case.get('expected_msg'):
             assert case['expected_msg'] in result.json()['message']
         if case.get('verify'):
@@ -332,7 +332,7 @@ class TestCategoryList:
             page_size=case.get('page_size'),
         )
 
-        assert_common(result, code=case['expected_code'])
+        assert_common(result, code=case['expected_code'], http=case.get('expected_http', 200))
         if case.get('expected_msg'):
             assert case['expected_msg'] in result.json()['message']
         if case.get('verify_empty'):
@@ -367,7 +367,7 @@ class TestCategoryWithChildren:
         child_id = self._find_id_by_name(logged_in_session, child_name, parent_id=parent_id)
         assert child_id is not None, '前置失败：子分类没建出来'
 
-        # 查树取值：找父节点，看 children 里挂的是不是亲儿子
+        # 查树取值：找父节点，看 children 里是否挂了刚建的子分类
         result = api.api_category_list_with_children_method(logged_in_session)
         tree = result.json()['data']
         parent_node = next((n for n in tree if n['id'] == parent_id), None)
@@ -376,7 +376,7 @@ class TestCategoryWithChildren:
             child_in_tree = next((c for c in (parent_node.get('children') or [])
                                   if c['id'] == child_id), None)
 
-        # 清理：先删子再删父（顺序反了就触发 DEFECT-12 留孤儿）
+        # 清理：先删子再删父（顺序反了会触发 DEFECT-12 留孤儿）
         api.api_category_delete_method(logged_in_session, category_id=child_id)
         api.api_category_delete_method(logged_in_session, category_id=parent_id)
 
@@ -384,11 +384,11 @@ class TestCategoryWithChildren:
         assert_common(result, code=200)
         assert parent_node is not None, f'树里应能找到父分类 {parent_name}'
         assert child_in_tree is not None, '子分类应挂在父节点的 children 下'
-        # DEFECT-21：树查询子节点 parentId 返回 null（detail/list 有值，接口间不一致），固化实际行为
+        # DEFECT-21：树查询子节点 parentId 返回 null（detail/list 有值，接口间不一致），按实际行为断言
         assert child_in_tree['parentId'] is None, f'树子节点 parentId 当前为 null，实际 {child_in_tree["parentId"]}'
 
     def test_with_children_unauthorized(self):
-        '''横切冒烟：未登录访问应 401（鉴权基线 + 给 401 误报缺陷当对照照）'''
+        '''横切冒烟：未登录访问应 401（鉴权基线）'''
         api = ApiProductCategory()
         raw_session = requests.Session()   # 未登录：不带 token 的裸会话
 

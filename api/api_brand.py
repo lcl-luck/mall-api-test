@@ -48,7 +48,7 @@ class ApiBrand:
         return session.get(url=url)
 
 
-if __name__ == '__&#8203;main__':
+if __name__ == '__main__':
     # 调试当前脚本：先登录，再调品牌接口
     from api.api_login import ApiLogin
 

@@ -122,6 +122,7 @@
       "desc": "DEFECT-参数异常-id为abc-误报401",
       "category_id": "abc",
       "expected_code": 401,
+      "expected_http": 400,
       "expected_msg": "暂未登录"
     }
   ],
@@ -152,6 +153,7 @@
       "keywords": null,
       "description": null,
       "expected_code": 401,
+      "expected_http": 500,
       "expected_msg": "暂未登录"
     },
     {
@@ -180,6 +182,7 @@
       "keywords": null,
       "description": null,
       "expected_code": 401,
+      "expected_http": 400,
       "expected_msg": "暂未登录"
     },
     {
@@ -205,6 +208,7 @@
       "page_num": 1,
       "page_size": 5,
       "expected_code": 401,
+      "expected_http": 400,
       "expected_msg": "暂未登录"
     },
     {
@@ -221,6 +225,7 @@
       "page_num": 1,
       "page_size": "abc",
       "expected_code": 401,
+      "expected_http": 400,
       "expected_msg": "暂未登录"
     },
     {

@@ -48,8 +48,7 @@ class ApiProduct:
                                   stock=None, delete_status=0):
         """创建商品（JSON 请求体）
 
-        源码发现：create 没有任何参数校验（连 @Validated 都没加），
-        非法数据能不能入库要实测——反向用例的价值点就在这
+        注意：create 未做参数校验（源码无 @Validated），非法数据可能直接入库
         """
         url = f'{BASE_URL}/product/create'
         payload = {
@@ -98,7 +97,7 @@ class ApiProduct:
     def api_product_update_verify_status_method(self, session, ids, verify_status, detail):
         """批量修改审核状态（表单参数）
 
-        注意：五胞胎里的叛徒——比其他 4 个多一个必传的 detail 参数
+        注意：与同组其他接口不同，多一个必传的 detail 参数
         """
         url = f'{BASE_URL}/product/update/verifyStatus'
         data = {

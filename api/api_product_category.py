@@ -3,7 +3,7 @@
 '''
 import requests
 
-from config import BASE_URL, TOKEN_HEAD
+from config import BASE_URL
 
 
 class ApiProductCategory:
@@ -101,16 +101,6 @@ class ApiProductCategory:
             "description": description,
         }
         return session.post(url, json=payload)
-
-    def api_category_list_method(self, session, parent_id=0, page_num=1, page_size=50):
-        '''
-        分页查询某父分类下的子分类（用于反查新建分类的 id）
-        :param session: 已登录的会话
-        :param parent_id: 父分类 id，0 表示一级分类列表
-        :return: 接口响应对象
-        '''
-        url = f'{BASE_URL}/productCategory/list/{parent_id}'
-        return session.get(url, params={"pageNum": page_num, "pageSize": page_size})
 
     def api_category_delete_method(self, session, category_id):
         '''

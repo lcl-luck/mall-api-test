@@ -1,8 +1,7 @@
 """
 商品写接口测试脚本
-A 组：批量改状态五胞胎——publishStatus 测透、其余冒烟、deleteStatus 补差异
-B 组：创建/修改——正向闭环 + 反向数据驱动
-实测发现 7 个服务端缺陷，已固化（注释标 DEFECT）
+A 组：批量改状态（publishStatus 全量，其余抽测，deleteStatus 补差异）
+B 组：创建/修改（正向闭环 + 反向数据驱动）
 """
 import pytest
 
@@ -31,7 +30,7 @@ def _clean_up(session, product_id):
 
 
 class TestProductStatus:
-    """A 组：批量改状态（五胞胎）"""
+    """A 组：批量改状态接口"""
 
     def test_publish_status_flow(self, logged_in_session):
         """1 正向+关联：上架→按状态查回→下架→查不到（流转闭环）"""
@@ -52,7 +51,7 @@ class TestProductStatus:
 
     def test_publish_status_value_illegal(self, logged_in_session):
         """3 反向：状态值 99
-        DEFECT 固化：服务端不校验取值，99 被静默写库（应仅允许 0/1）
+        DEFECT：服务端不校验取值，99 被静默写库（应仅允许 0/1）
         """
         pid = _create_one(logged_in_session, '自测-非法状态')
         r = ApiProduct().api_product_update_publish_status_method(logged_in_session, [pid], 99)
@@ -61,12 +60,12 @@ class TestProductStatus:
 
     def test_publish_status_ids_empty(self, logged_in_session):
         """4 反向：ids 传空
-        DEFECT 固化：空 ids 拼出非法 SQL，且把数据库原始报错泄露给前端（安全隐患）
+        DEFECT：空 ids 拼出非法 SQL，且把数据库原始报错返回给前端（安全隐患）
         """
         r = ApiProduct().api_product_update_publish_status_method(logged_in_session, [], 0)
         body = r.json()
         assert body['code'] == 500
-        assert 'SQL syntax' in body['message'], 'DEFECT 证据：前端竟收到数据库原始报错'
+        assert 'SQL syntax' in body['message'], '空 ids 时前端收到了数据库原始报错'
 
     def test_new_status_smoke(self, logged_in_session):
         """5 冒烟：设新品→详情查回"""
@@ -87,7 +86,7 @@ class TestProductStatus:
         _clean_up(logged_in_session, pid)
 
     def test_verify_status_smoke(self, logged_in_session):
-        """7 冒烟：审核通过→详情查回（五胞胎叛徒，多传 detail）"""
+        """7 冒烟：审核通过→详情查回（此接口需多传 detail）"""
         api = ApiProduct()
         pid = _create_one(logged_in_session, '自测-审核')
         assert_common(api.api_product_update_verify_status_method(logged_in_session, [pid], 1, '测试审核'))
@@ -95,7 +94,7 @@ class TestProductStatus:
         _clean_up(logged_in_session, pid)
 
     def test_delete_status_diff(self, logged_in_session):
-        """8 差异：逻辑删除后列表查不到（呼应「银色商品搜不到」的坑）"""
+        """8 差异：逻辑删除后列表查不到"""
         api = ApiProduct()
         pid = _create_one(logged_in_session, '自测-逻辑删')
         assert len(api.api_product_simple_list_method(logged_in_session, keyword='自测-逻辑删').json()['data']) == 1
@@ -119,8 +118,8 @@ class TestProductCrud:
     @pytest.mark.parametrize('case', product_write_data, ids=[c['desc'] for c in product_write_data])
     def test_create_parametrize(self, logged_in_session, case):
         """10 反向数据驱动：缺名称/价格负/库存负/市场价负
-        价格/库存/市场价 → DEFECT 固化：负数被静默放行入库
-        缺名称 → 待实测（上轮被 401 偶发挡住）
+        价格/库存/市场价 → DEFECT：负数被静默放行入库
+        缺名称 → 待实测
         """
         r = ApiProduct().api_product_create_method(
             logged_in_session,
@@ -144,14 +143,14 @@ class TestProductCrud:
 
     def test_update_not_exist(self, logged_in_session):
         """12 反向：改不存在的 id
-        DEFECT 固化：返回 200 成功，未校验商品是否存在（应报错）
+        DEFECT：返回 200 成功，未校验商品是否存在（应报错）
         """
         r = ApiProduct().api_product_update_method(logged_in_session, 999999, name='改不到')
         assert r.json()['code'] == 200  # DEFECT：未校验存在性
 
     def test_create_product_sn_duplicate(self, logged_in_session):
         """13 反向：productSn 重复
-        DEFECT 固化：无唯一性约束，重复货号被放行入库
+        DEFECT：无唯一性约束，重复货号被放行入库
         """
         pid = _create_one(logged_in_session, '自测-重复sn')
         r = ApiProduct().api_product_create_method(

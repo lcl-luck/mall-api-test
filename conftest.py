@@ -1,9 +1,8 @@
 import pytest
 import requests
-
-from api.api_login import ApiLogin
 import allure
 
+from api.api_login import ApiLogin
 
 
 @pytest.fixture

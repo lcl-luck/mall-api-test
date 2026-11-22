@@ -26,5 +26,5 @@ class ApiLogin:
 
 if __name__ == '__main__':
     api_login = ApiLogin()
-    result = api_login.api_login_method();
+    result = api_login.api_login_method()
     print(result.json())
