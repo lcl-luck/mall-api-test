@@ -1,0 +1,243 @@
+{
+  "update": [
+    {
+      "desc": "正向-改名称",
+      "name": "手机数码-改名测试",
+      "parent_id": 0,
+      "product_unit": "个",
+      "nav_status": 0,
+      "show_status": 0,
+      "sort": 0,
+      "product_attribute_id_list": [],
+      "expected_code": 200,
+      "verify": true
+    },
+    {
+      "desc": "反向-名称为空",
+      "name": "",
+      "parent_id": 0,
+      "product_unit": "个",
+      "nav_status": 0,
+      "show_status": 0,
+      "sort": 0,
+      "product_attribute_id_list": [],
+      "expected_code": 404,
+      "expected_msg": "不能为空"
+    },
+    {
+      "desc": "DEFECT-父分类不存在-放行200",
+      "name": "测试分类",
+      "parent_id": 99999,
+      "product_unit": "个",
+      "nav_status": 0,
+      "show_status": 0,
+      "sort": 0,
+      "product_attribute_id_list": [],
+      "expected_code": 200
+    },
+    {
+      "desc": "DEFECT-父分类自引用-放行200",
+      "name": "测试分类",
+      "parent_id": 1,
+      "product_unit": "个",
+      "nav_status": 0,
+      "show_status": 0,
+      "sort": 0,
+      "product_attribute_id_list": [],
+      "expected_code": 200
+    },
+    {
+      "desc": "边界-属性列表为空",
+      "name": "测试分类",
+      "parent_id": 0,
+      "product_unit": "个",
+      "nav_status": 0,
+      "show_status": 0,
+      "sort": 0,
+      "product_attribute_id_list": [],
+      "expected_code": 200
+    }
+  ],
+  "showStatus": [
+    {
+      "desc": "DEFECT-逆向-showStatus越界(2)-放行200",
+      "ids": [
+        1
+      ],
+      "show_status": 2,
+      "expected_code": 200,
+      "expected_msg": "操作成功"
+    },
+    {
+      "desc": "DEFECT-逆向-showStatus越界(99)-放行200",
+      "ids": [
+        1
+      ],
+      "show_status": 99,
+      "expected_code": 200,
+      "expected_msg": "操作成功"
+    },
+    {
+      "desc": "DEFECT-逆向-ids不存在-返回500",
+      "ids": [
+        99999
+      ],
+      "show_status": 0,
+      "expected_code": 500,
+      "expected_msg": "操作失败"
+    }
+  ],
+  "navStatus": [
+    {
+      "desc": "DEFECT-逆向-navStatus越界(99)-放行200",
+      "ids": [
+        1
+      ],
+      "nav_status": 99,
+      "expected_code": 200,
+      "expected_msg": "操作成功"
+    },
+    {
+      "desc": "DEFECT-逆向-ids为空-SQL报错泄露",
+      "ids": [],
+      "nav_status": 0,
+      "expected_code": 500,
+      "expected_msg": "SQL syntax"
+    }
+  ],
+  "delete": [
+    {
+      "desc": "DEFECT-逆向-删不存在的id-返回500",
+      "category_id": 99999,
+      "expected_code": 500,
+      "expected_msg": "操作失败"
+    },
+    {
+      "desc": "DEFECT-参数异常-id为0-返回500",
+      "category_id": 0,
+      "expected_code": 500,
+      "expected_msg": "操作失败"
+    },
+    {
+      "desc": "DEFECT-参数异常-id为abc-误报401",
+      "category_id": "abc",
+      "expected_code": 401,
+      "expected_msg": "暂未登录"
+    }
+  ],
+  "create": [
+    {
+      "desc": "逆向-name缺省(null)-正确拦截404",
+      "name": null,
+      "parent_id": 0,
+      "product_unit": "个",
+      "nav_status": 0,
+      "show_status": 0,
+      "sort": 0,
+      "icon": null,
+      "keywords": null,
+      "description": null,
+      "expected_code": 404,
+      "expected_msg": "不能为空"
+    },
+    {
+      "desc": "DEFECT-逆向-parentId缺省(null)-误报401",
+      "name": "临时分类-parentId缺省",
+      "parent_id": null,
+      "product_unit": "个",
+      "nav_status": 0,
+      "show_status": 0,
+      "sort": 0,
+      "icon": null,
+      "keywords": null,
+      "description": null,
+      "expected_code": 401,
+      "expected_msg": "暂未登录"
+    },
+    {
+      "desc": "DEFECT-逆向-parentId不存在(99999)-放行200",
+      "name": "临时分类-parentId不存在",
+      "parent_id": 99999,
+      "product_unit": "个",
+      "nav_status": 0,
+      "show_status": 0,
+      "sort": 0,
+      "icon": null,
+      "keywords": null,
+      "description": null,
+      "expected_code": 200,
+      "expected_msg": "操作成功"
+    },
+    {
+      "desc": "DEFECT-逆向-parentId非数字(abc)-误报401",
+      "name": "临时分类-parentId非数字",
+      "parent_id": "abc",
+      "product_unit": "个",
+      "nav_status": 0,
+      "show_status": 0,
+      "sort": 0,
+      "icon": null,
+      "keywords": null,
+      "description": null,
+      "expected_code": 401,
+      "expected_msg": "暂未登录"
+    },
+    {
+      "desc": "逆向-navStatus缺省(null)-NULL直接入库无人兜底",
+      "name": "临时分类-navStatus缺省",
+      "parent_id": 0,
+      "product_unit": "个",
+      "nav_status": null,
+      "show_status": 0,
+      "sort": 0,
+      "icon": null,
+      "keywords": null,
+      "description": null,
+      "expected_code": 200,
+      "expected_msg": "操作成功",
+      "verify": true
+    }
+  ],
+  "list": [
+    {
+      "desc": "DEFECT-逆向-parentId非数字(abc)-误报401",
+      "parent_id": "abc",
+      "page_num": 1,
+      "page_size": 5,
+      "expected_code": 401,
+      "expected_msg": "暂未登录"
+    },
+    {
+      "desc": "逆向-parentId不存在(99999)-返回空列表",
+      "parent_id": 99999,
+      "page_num": 1,
+      "page_size": 5,
+      "expected_code": 200,
+      "verify_empty": true
+    },
+    {
+      "desc": "DEFECT-逆向-pageSize非数字(abc)-误报401",
+      "parent_id": 0,
+      "page_num": 1,
+      "page_size": "abc",
+      "expected_code": 401,
+      "expected_msg": "暂未登录"
+    },
+    {
+      "desc": "DEFECT-边界-pageSize为0-放行200返回空页",
+      "parent_id": 0,
+      "page_num": 1,
+      "page_size": 0,
+      "expected_code": 200,
+      "expected_msg": "操作成功"
+    },
+    {
+      "desc": "DEFECT-边界-pageSize为-1-放行200返回空页",
+      "parent_id": 0,
+      "page_num": 1,
+      "page_size": -1,
+      "expected_code": 200,
+      "expected_msg": "操作成功"
+    }
+  ]
+}

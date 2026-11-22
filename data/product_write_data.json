@@ -1,0 +1,35 @@
+[
+  {
+    "desc": "创建缺名称",
+    "name": "",
+    "product_sn": "AUTO-SN-01",
+    "price": 9.9,
+    "stock": 10,
+    "expected_code": 200
+  },
+  {
+    "desc": "创建价格负数",
+    "name": "自测-负价",
+    "product_sn": "AUTO-SN-02",
+    "price": -1,
+    "stock": 10,
+    "expected_code": 200
+  },
+  {
+    "desc": "创建库存负数",
+    "name": "自测-负库存",
+    "product_sn": "AUTO-SN-03",
+    "price": 9.9,
+    "stock": -1,
+    "expected_code": 200
+  },
+  {
+    "desc": "创建市场价负数",
+    "name": "自测-负市场价",
+    "product_sn": "AUTO-SN-04",
+    "price": 9.9,
+    "stock": 10,
+    "original_price": -99,
+    "expected_code": 200
+  }
+]

@@ -1,0 +1,27 @@
+[
+  {
+    "desc": "按上架状态查询",
+    "keyword": null,
+    "publish_status": 1,
+    "page_num": 1,
+    "page_size": 5,
+    "expected_code": 200
+  },
+  {
+    "desc": "关键字无结果",
+    "keyword": "不存在的商品xyz",
+    "publish_status": null,
+    "page_num": 1,
+    "page_size": 5,
+    "expected_code": 200,
+    "expected_empty": true
+  },
+  {
+    "desc": "分页第2页",
+    "keyword": null,
+    "publish_status": null,
+    "page_num": 2,
+    "page_size": 5,
+    "expected_code": 200
+  }
+]
